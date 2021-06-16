@@ -1,16 +1,16 @@
 #pragma once
-#include "world.h"
+#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
+#include "player.h"
 
-class Game
+class game
 {
 public:
-	Game();
+	game();
+	void update();
+	void draw(sf::RenderWindow* target);
+	sf::View mainView;
 private:
-	World* world;
+	player player;
 };
-
-Game::Game()
-{
-	world = new World(World::Small);
-}
 
