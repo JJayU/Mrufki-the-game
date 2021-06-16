@@ -3,14 +3,15 @@
 #include <SFML/Graphics.hpp>
 #include "player.h"
 
-class game
+class game : public sf::Drawable
 {
 public:
 	game();
 	void update();
-	void draw(sf::RenderWindow* target);
 	sf::View mainView;
 private:
 	player player;
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 

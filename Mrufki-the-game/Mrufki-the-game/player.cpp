@@ -1,15 +1,5 @@
 #include "player.h"
 
-void player::draw(sf::RenderWindow* target)
-{
-	sf::RectangleShape playerBox;
-	playerBox.setPosition(position);
-	playerBox.move(-16, -48);
-	playerBox.setSize(sf::Vector2f(32, 48));
-	playerBox.setFillColor(sf::Color::Black);
-	target->draw(playerBox);
-}
-
 void player::setPosition(sf::Vector2f newPos)
 {
 	position = newPos;
@@ -41,4 +31,15 @@ sf::Vector2f player::getEyesPos()
 	float y = position.y - 32;
 
 	return { x, y };
+}
+
+void player::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	sf::RectangleShape playerBox;
+	playerBox.setPosition(position);
+	playerBox.move(-16, -48);
+	playerBox.setSize(sf::Vector2f(32, 48));
+	playerBox.setFillColor(sf::Color::Black);
+
+	target.draw(playerBox);
 }

@@ -12,7 +12,8 @@ void game::update()
 	mainView.setCenter(player.getEyesPos());
 }
 
-void game::draw(sf::RenderWindow* target)
+void game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	player.draw(target);
+	target.draw(player);
+	target.setView(mainView);
 }

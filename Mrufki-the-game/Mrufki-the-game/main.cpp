@@ -35,9 +35,7 @@ int main()
         window.draw(kwadrat);
 
         game.update();      
-        window.setView(game.mainView);
-        game.draw(&window);
-       
+        window.draw(game);
         window.display();
     }
 
