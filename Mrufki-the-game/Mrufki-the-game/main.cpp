@@ -1,16 +1,14 @@
 #include "game.h"
+#include "chunk.h"
 
 int main() 
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Mrufki", sf::Style::Close);
 
-    sf::RectangleShape kwadrat;
-    kwadrat.setFillColor(sf::Color(100, 0, 0));
-    kwadrat.setSize(sf::Vector2f(16, 16));
-    kwadrat.setPosition(0, 0);
-
     game game;
-    game.mainView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
+
+    sf::Clock clock;
+    sf::Time deltaTime = clock.restart();
 
     while (window.isOpen()) 
     {
@@ -32,10 +30,10 @@ int main()
 
         window.clear(sf::Color(150,150,255));
 
-        window.draw(kwadrat);
-
-        game.update();      
+        deltaTime = clock.restart();
+        game.update(deltaTime);   
         window.draw(game);
+        
         window.display();
     }
 
