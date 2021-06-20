@@ -11,15 +11,16 @@ game::game()
 	//etc
 }
 
-void game::update(sf::Time& deltaTime)
+void game::update(sf::Time* deltaTime)
 {
-	player.update(deltaTime);
+	//std::cout << world.getBlockTypeOn(player.getEyesPos()) << "\n";
+	player.update(*deltaTime, &world);
 	mainView.setCenter(player.getEyesPos());
 }
 
 void game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(player);
 	target.setView(mainView);
 	target.draw(world);
+	target.draw(player);
 }

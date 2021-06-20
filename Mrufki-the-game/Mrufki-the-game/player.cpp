@@ -1,26 +1,56 @@
 #include "player.h"
 
+player::player()
+{
+	if (!texture.loadFromFile("Textures/player_texture.png"))
+	{
+		std::cout << "Could not load player texture\n";
+	}
+	player_sprite.setTexture(texture);
+	player_sprite.setOrigin({16,46});
+}
+
 void player::setPosition(sf::Vector2f newPos)
 {
 	position = newPos;
 }
 
-void player::update(sf::Time& deltaTime)
+void player::update(sf::Time& deltaTime, world* world)
 {
+	bool isBlockBelow = (world->getBlockTypeOn({ position.x - 10, position.y + 2 }) > 0 || world->getBlockTypeOn({ position.x + 10, position.y + 2 }) > 0);
+	bool isBlockAbove = (world->getBlockTypeOn({ position.x - 10, position.y - 50 }) > 0 || world->getBlockTypeOn({ position.x + 10, position.y - 50 }) > 0);
+	bool isBlockRight = (world->getBlockTypeOn({ position.x + 15, position.y - 4 }) > 0 || world->getBlockTypeOn({ position.x + 15, position.y - 20 }) > 0 || world->getBlockTypeOn({ position.x + 15, position.y - 36 }) > 0);
+	bool isBlockLeft  = (world->getBlockTypeOn({ position.x - 15, position.y - 4 }) > 0 || world->getBlockTypeOn({ position.x - 15, position.y - 20 }) > 0 || world->getBlockTypeOn({ position.x - 15, position.y - 36 }) > 0);
+	std::cout << isBlockLeft << " " << isBlockRight << "\n";
+
 	//horizontal moves
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !isBlockLeft)
 	{
+		player_sprite.setScale({ -1,1 });
 		if (currentSpeed.x > -MAX_SPEED)
 		{
 			currentSpeed.x -= 4;
 		}
+		if (currentSpeed.x > 0)
+		{
+			currentSpeed.x -= 40;
+		}
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && !isBlockRight)
 	{
+		player_sprite.setScale({ 1,1 });
 		if (currentSpeed.x < MAX_SPEED)
 		{
 			currentSpeed.x += 4;
 		}
+		if (currentSpeed.x < 0)
+		{
+			currentSpeed.x += 40;
+		}
+	}
+	else if (isBlockRight || isBlockLeft)
+	{
+		currentSpeed.x = 0;
 	}
 	else
 	{
@@ -42,31 +72,44 @@ void player::update(sf::Time& deltaTime)
 	}
 
 	//verical moves
+	if (!isBlockBelow)
+	{
+		inAir = true;
+	}
+	if (isBlockAbove && currentSpeed.y < 0)
+	{
+		currentSpeed.y = 0;
+	}
+	if (inAir && currentSpeed.y < MAX_SPEED*2)
+	{
+		std::cout << "FALL\n";
+		currentSpeed.y += 1000 * deltaTime.asMicroseconds() / 1'000'000.0f;
+	}
+	if (inAir && isBlockBelow && currentSpeed.y >= 0)
+	{
+		currentSpeed.y = 0;
+		//position.y = position.y + 16 - (int)position.y % 16;
+		inAir = false;
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && !inAir)
 	{
 		currentSpeed.y = -500;
 		inAir = true;
 	}
-	if (inAir && position.y < 256)
-	{
-		currentSpeed.y += 1000 * deltaTime.asMicroseconds() / 1'000'000.0f;
-	}
-	if (position.y > 256)
-	{
-		currentSpeed.y = 0;
-		position.y = 256;
-		inAir = false;
-	}
+	
+	
 
 	position.x += currentSpeed.x * deltaTime.asMicroseconds() / 1'000'000.0f;
 	position.y += currentSpeed.y * deltaTime.asMicroseconds() / 1'000'000.0f;
 
-	std::cout << 1'000'000.0f / deltaTime.asMicroseconds() << "\n";   //FPS
+	player_sprite.setPosition(position);
+
+	//std::cout << 1'000'000.0f / deltaTime.asMicroseconds() << "\n";   //FPS
 }
 
 sf::Vector2f player::getEyesPos()
 {
-	float x = position.x - 16;
+	float x = position.x;
 	float y = position.y - 32;
 
 	return { x, y };
@@ -74,17 +117,13 @@ sf::Vector2f player::getEyesPos()
 
 void player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	sf::Texture texture;
-	if (!texture.loadFromFile("Textures/player.png"))
-	{
-		std::cout << "Could not load player texture\n";
-	}
+	//sf::Texture texture;
+	
 
-	sf::RectangleShape playerBox;
-	playerBox.setTexture(&texture);
-	playerBox.setPosition(position);
-	playerBox.move(-16, -48);
-	playerBox.setSize(sf::Vector2f(32, 48));
-
-	target.draw(playerBox);
+	//sf::RectangleShape playerBox;
+	//playerBox.setTexture(&texture);
+	//player_sprite.setPosition(position);
+	//playerBox.move(-16, -48);
+	//playerBox.setSize(sf::Vector2f(32, 48));
+	target.draw(player_sprite);
 }

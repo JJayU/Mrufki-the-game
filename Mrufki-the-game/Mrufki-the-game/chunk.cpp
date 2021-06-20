@@ -8,7 +8,7 @@ chunk::chunk(sf::Vector2f position)
 	{
 		for (size_t j = 0; j < 8; j++)
 		{
-			blocks[j][i] = new block(0, { position.x + 16 * j, position.y + 16 * i });
+			blocks[j][i] = new block(1, { position.x + 16 * j, position.y + 16 * i });
 		}
 	}
 }
@@ -22,4 +22,20 @@ void chunk::draw(sf::RenderTarget& target, sf::RenderStates states) const
 			target.draw(*blocks[j][i]);
 		}
 	}
+}
+
+int chunk::getBlockTypeOn(sf::Vector2f position)
+{
+	int x = ( (int)position.x / 16 ) % 8;
+	int y = ( (int)position.y / 16 ) % 8;
+
+	return blocks[x][y]->getID();
+}
+
+void chunk::setBlock(sf::Vector2f position, int id)
+{
+	int x = ((int)position.x / 16) % 8;
+	int y = ((int)position.y / 16) % 8;
+
+	blocks[x][y]->setID(id);
 }

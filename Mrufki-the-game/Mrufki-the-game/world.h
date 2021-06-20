@@ -7,6 +7,8 @@ class world : public sf::Drawable
 {
 public:
 	world();
+	int getBlockTypeOn(sf::Vector2f position);
+	void setBlock(sf::Vector2f position, int id);
 
 private:
 	chunk* chunks[WORLD_SIZE][WORLD_SIZE/2];

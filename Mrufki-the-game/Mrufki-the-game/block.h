@@ -7,14 +7,17 @@ class block : public sf::Drawable
 {
 public:
 	block(unsigned int id, sf::Vector2f position);
-
-	unsigned int ID_;
 	sf::Vector2f position_ = { 0,0 };
-	sf::Texture texture;
+	
+	unsigned int getID();
+	void setID(unsigned int id);
+
 private:
-	// Odziedziczono za poœrednictwem elementu Drawable
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
 	void updateTexture();
+	sf::Texture texture;
 	sf::Sprite block_sprite;
+	unsigned int ID_;
 };
 

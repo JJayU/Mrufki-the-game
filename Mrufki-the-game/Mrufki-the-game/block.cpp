@@ -28,3 +28,14 @@ void block::updateTexture()
 		break;
 	}
 }
+
+unsigned int block::getID()
+{
+	return ID_;
+}
+
+void block::setID(unsigned int id)
+{
+	ID_ = id;
+	updateTexture();
+}

@@ -16,8 +16,8 @@ void world::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	sf::View tview = target.getView();
 	sf::FloatRect viewdim = tview.getViewport();
 
-	int left = (tview.getCenter().x - viewdim.width > 0 ? tview.getCenter().x - viewdim.width : 0);
-	int top = (tview.getCenter().y - viewdim.height > 0 ? tview.getCenter().y - viewdim.height : 0);
+	int left = (tview.getCenter().x - 320 > 0 ? tview.getCenter().x - 320 : 0);
+	int top = (tview.getCenter().y - 180 > 0 ? tview.getCenter().y - 180 : 0);
 
 	int right = (left + 640) / 128 + 1< WORLD_SIZE ? (left + 640) / 128 + 1 : WORLD_SIZE;
 	int bottom = (top + 480) / 128 + 1 < WORLD_SIZE/2 ? (top + 480) / 128 + 1 : WORLD_SIZE/2;
@@ -31,5 +31,31 @@ void world::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		{
 			target.draw(*chunks[j][i]);
 		}
+	}
+}
+
+int world::getBlockTypeOn(sf::Vector2f position)
+{
+	int chunkX = position.x / 128;
+	int chunkY = position.y / 128;
+
+	if (position.x > 0 && chunkX < WORLD_SIZE && position.y > 0 && chunkY < WORLD_SIZE / 2)
+	{
+		return chunks[chunkX][chunkY]->getBlockTypeOn(position);
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+void world::setBlock(sf::Vector2f position, int id)
+{
+	int chunkX = position.x / 128;
+	int chunkY = position.y / 128;
+
+	if (position.x > 0 && chunkX < WORLD_SIZE && position.y > 0 && chunkY < WORLD_SIZE / 2)
+	{
+		chunks[chunkX][chunkY]->setBlock(position, id);
 	}
 }

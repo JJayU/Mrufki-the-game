@@ -8,12 +8,13 @@ class game : public sf::Drawable
 {
 public:
 	game();
-	void update(sf::Time& deltaTime);
+	void update(sf::Time* deltaTime);
+	world world;
 
 private:
 	player player; 
 	sf::View mainView;
-	world world;
+	
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
