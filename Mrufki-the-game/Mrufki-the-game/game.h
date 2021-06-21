@@ -12,7 +12,7 @@ public:
 	world world;
 
 private:
-	player player; 
+	player player;
 	sf::View mainView;
 	
 

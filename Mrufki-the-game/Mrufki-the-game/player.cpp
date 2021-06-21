@@ -21,7 +21,6 @@ void player::update(sf::Time& deltaTime, world* world)
 	bool isBlockAbove = (world->getBlockTypeOn({ position.x - 10, position.y - 50 }) > 0 || world->getBlockTypeOn({ position.x + 10, position.y - 50 }) > 0);
 	bool isBlockRight = (world->getBlockTypeOn({ position.x + 15, position.y - 4 }) > 0 || world->getBlockTypeOn({ position.x + 15, position.y - 20 }) > 0 || world->getBlockTypeOn({ position.x + 15, position.y - 36 }) > 0);
 	bool isBlockLeft  = (world->getBlockTypeOn({ position.x - 15, position.y - 4 }) > 0 || world->getBlockTypeOn({ position.x - 15, position.y - 20 }) > 0 || world->getBlockTypeOn({ position.x - 15, position.y - 36 }) > 0);
-	std::cout << isBlockLeft << " " << isBlockRight << "\n";
 
 	//horizontal moves
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !isBlockLeft)
@@ -82,7 +81,6 @@ void player::update(sf::Time& deltaTime, world* world)
 	}
 	if (inAir && currentSpeed.y < MAX_SPEED*2)
 	{
-		std::cout << "FALL\n";
 		currentSpeed.y += 1000 * deltaTime.asMicroseconds() / 1'000'000.0f;
 	}
 	if (inAir && isBlockBelow && currentSpeed.y >= 0)

@@ -17,7 +17,7 @@ public:
 private:
 	sf::Texture texture;
 	sf::Sprite player_sprite;
-	sf::Vector2f position = { 0, 256 };
+	sf::Vector2f position;
 	sf::Vector2f currentSpeed = { 0,0 };
 	bool inAir = false;
 	bool rotation = true;		//right - true, left - false

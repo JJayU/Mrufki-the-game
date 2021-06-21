@@ -8,7 +8,7 @@ chunk::chunk(sf::Vector2f position)
 	{
 		for (size_t j = 0; j < 8; j++)
 		{
-			blocks[j][i] = new block(1, { position.x + 16 * j, position.y + 16 * i });
+			blocks[j][i] = new block(0, { position.x + 16 * j, position.y + 16 * i });
 		}
 	}
 }
