@@ -10,7 +10,6 @@
 	5 - wall
 */
 
-
 block::block(unsigned int id, sf::Vector2f position)
 {
 	ID_ = id;

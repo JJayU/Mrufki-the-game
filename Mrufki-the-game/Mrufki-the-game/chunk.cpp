@@ -13,6 +13,17 @@ chunk::chunk(sf::Vector2f position)
 	}
 }
 
+chunk::~chunk()
+{
+	for (size_t i = 0; i < 8; i++)
+	{
+		for (size_t j = 0; j < 8; j++)
+		{
+			delete blocks[j][i];
+		}
+	}
+}
+
 void chunk::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	for (size_t i = 0; i < 8; i++)

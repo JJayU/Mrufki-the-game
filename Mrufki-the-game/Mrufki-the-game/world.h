@@ -9,6 +9,7 @@ class world : public sf::Drawable
 {
 public:
 	world();
+	~world();
 	int getBlockTypeOn(sf::Vector2f position);
 	void setBlock(sf::Vector2f position, int id);
 

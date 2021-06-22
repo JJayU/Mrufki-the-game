@@ -2,6 +2,7 @@
 
 world::world()
 {
+	//Initialise blocks
 	for (int i = 0; i < WORLD_SIZE/2; i++)
 	{
 		for (int j = 0; j < WORLD_SIZE; j++)
@@ -15,6 +16,7 @@ world::world()
 	srand(time(NULL));
 	std::vector<int> surface = perlinNoise(WORLD_SIZE * 8, 1);
 
+	//Surface
 	for (int i = 0; i < WORLD_SIZE * 8; i++)
 	{
 		sf::Vector2f pos = { (float)i * 16.0f, (float)surface[i] * 16.0f + 160.0f};
@@ -24,7 +26,7 @@ world::world()
 			{
 				setBlock({ pos.x, pos.y + j - pos.y }, 2);
 			}
-			else if (j - pos.y < 64)
+			else if (j - pos.y < 128)
 			{
 				setBlock({ pos.x, pos.y + j - pos.y }, 1);
 			}
@@ -35,6 +37,7 @@ world::world()
 		}
 	}
 	
+	//Wall
 	for (int i = 0; i < WORLD_SIZE * 8; i++)
 	{
 		for (int j = 0; j < WORLD_SIZE * 8 / 2; j++)
@@ -47,6 +50,17 @@ world::world()
 	}
 
 	//exit(0);
+}
+
+world::~world()
+{
+	for (int i = 0; i < WORLD_SIZE / 2; i++)
+	{
+		for (int j = 0; j < WORLD_SIZE; j++)
+		{
+			delete chunks[j][i];
+		}
+	}
 }
 
 void world::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -100,7 +114,7 @@ void world::setBlock(sf::Vector2f position, int id)
 
 std::vector<int> world::perlinNoise(int length, int seed)
 {
-	std::vector<int> pass1 = noiseFunction(length, 4, WORLD_SIZE * 8 / 4);
+	std::vector<int> pass1 = noiseFunction(length, WORLD_SIZE / 4, WORLD_SIZE * 8 / 4);
 
 	return pass1;
 }

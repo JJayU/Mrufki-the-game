@@ -17,10 +17,13 @@ void player::setPosition(sf::Vector2f newPos)
 
 void player::update(sf::Time& deltaTime, world* world)
 {
-	bool isBlockBelow = (world->getBlockTypeOn({ position.x - 10, position.y + 2 }) > 0 || world->getBlockTypeOn({ position.x + 10, position.y + 2 }) > 0);
-	bool isBlockAbove = (world->getBlockTypeOn({ position.x - 10, position.y - 50 }) > 0 || world->getBlockTypeOn({ position.x + 10, position.y - 50 }) > 0);
-	bool isBlockRight = (world->getBlockTypeOn({ position.x + 15, position.y - 4 }) > 0 || world->getBlockTypeOn({ position.x + 15, position.y - 20 }) > 0 || world->getBlockTypeOn({ position.x + 15, position.y - 36 }) > 0);
-	bool isBlockLeft  = (world->getBlockTypeOn({ position.x - 15, position.y - 4 }) > 0 || world->getBlockTypeOn({ position.x - 15, position.y - 20 }) > 0 || world->getBlockTypeOn({ position.x - 15, position.y - 36 }) > 0);
+	bool isBlockBelow = (world->getBlockTypeOn({ position.x - 10, position.y + 2 })  >  0 || world->getBlockTypeOn({ position.x + 10, position.y + 2 })  >  0 || world->getBlockTypeOn({ position.x, position.y + 2 })       >  0);
+	bool isBlockAbove = (world->getBlockTypeOn({ position.x - 10, position.y - 50 }) >  0 || world->getBlockTypeOn({ position.x + 10, position.y - 50 }) >  0);
+	bool isBlockRight = (world->getBlockTypeOn({ position.x + 15, position.y - 4 })  >  0 || world->getBlockTypeOn({ position.x + 15, position.y - 20 }) >  0 || world->getBlockTypeOn({ position.x + 15, position.y - 36 }) >  0);
+	bool isBlockLeft  = (world->getBlockTypeOn({ position.x - 15, position.y - 4 })  >  0 || world->getBlockTypeOn({ position.x - 15, position.y - 20 }) >  0 || world->getBlockTypeOn({ position.x - 15, position.y - 36 }) >  0);
+	bool stairsRight  = (world->getBlockTypeOn({ position.x + 15, position.y - 4 })  >  0 && world->getBlockTypeOn({ position.x + 15, position.y - 20 }) == 0 && world->getBlockTypeOn({ position.x + 15, position.y - 36 }) == 0);
+	bool stairsLeft   = (world->getBlockTypeOn({ position.x - 15, position.y - 4 })  >  0 && world->getBlockTypeOn({ position.x - 15, position.y - 20 }) == 0 && world->getBlockTypeOn({ position.x - 15, position.y - 36 }) == 0);
+
 
 	//horizontal moves
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && !isBlockLeft)
@@ -47,7 +50,11 @@ void player::update(sf::Time& deltaTime, world* world)
 			currentSpeed.x += 40;
 		}
 	}
-	else if (isBlockRight || isBlockLeft)
+	else if ((sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::A)) && (stairsLeft || stairsRight))
+	{
+		currentSpeed.y -= 30;
+	}
+	else if (isBlockRight || isBlockLeft && !stairsRight)
 	{
 		currentSpeed.x = 0;
 	}
@@ -94,8 +101,6 @@ void player::update(sf::Time& deltaTime, world* world)
 		currentSpeed.y = -500;
 		inAir = true;
 	}
-	
-	
 
 	position.x += currentSpeed.x * deltaTime.asMicroseconds() / 1'000'000.0f;
 	position.y += currentSpeed.y * deltaTime.asMicroseconds() / 1'000'000.0f;
@@ -115,13 +120,5 @@ sf::Vector2f player::getEyesPos()
 
 void player::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	//sf::Texture texture;
-	
-
-	//sf::RectangleShape playerBox;
-	//playerBox.setTexture(&texture);
-	//player_sprite.setPosition(position);
-	//playerBox.move(-16, -48);
-	//playerBox.setSize(sf::Vector2f(32, 48));
 	target.draw(player_sprite);
 }

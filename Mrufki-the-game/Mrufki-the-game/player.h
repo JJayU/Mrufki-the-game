@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "world.h"
+#include "inventory.h"
 
 #pragma once
 
@@ -14,6 +15,7 @@ public:
 	void setPosition(sf::Vector2f newPos);
 	void update(sf::Time& deltaTime, world* world);
 	sf::Vector2f getEyesPos();
+	inventory inventory;
 private:
 	sf::Texture texture;
 	sf::Sprite player_sprite;

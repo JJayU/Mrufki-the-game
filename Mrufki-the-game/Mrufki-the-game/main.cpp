@@ -4,7 +4,6 @@
 int main() 
 {
     sf::RenderWindow window(sf::VideoMode(1280, 720), "Mrufki", sf::Style::Close);
-
     game game;
 
     sf::Clock clock;
@@ -26,18 +25,9 @@ int main()
                     window.close();
                 }
             }
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
-                sf::Vector2f mouse_position = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-                if (event.mouseButton.button == sf::Mouse::Right)
-                {
-                    game.world.setBlock(mouse_position, 1);
-                }
-                if (event.mouseButton.button == sf::Mouse::Left)
-                {
-                    game.world.setBlock(mouse_position, 0);
-                }
-            }
+
+            sf::Vector2f mouse_position = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            game.updateOnEvent(&event, mouse_position);
         }
 
         window.clear(sf::Color(150,150,255));
