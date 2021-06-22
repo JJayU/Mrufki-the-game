@@ -4,8 +4,6 @@
 #include "player.h"
 #include "world.h"
 
-#define DISPLAY_FPS true
-
 class game : public sf::Drawable
 {
 public:

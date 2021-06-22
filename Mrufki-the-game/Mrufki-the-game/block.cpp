@@ -6,8 +6,12 @@
 	1 - dirt
 	2 - grass
 	3 - stone
-	4 - wood
+	4 - wooden planks
 	5 - wall
+	6 - cobblestone
+	7 - smooth stone
+	8 - wood
+	9 - glass
 */
 
 block::block(unsigned int id, sf::Vector2f position)
@@ -26,29 +30,7 @@ void block::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void block::updateTexture()
 {
-	switch (ID_)
-	{
-	case 0:
-		texture.loadFromFile("Textures/textures.png", sf::IntRect(0, 0, 16, 16));
-		break;
-	case 1:
-		texture.loadFromFile("Textures/textures.png", sf::IntRect(16, 0, 16, 16));
-		break;
-	case 2:
-		texture.loadFromFile("Textures/textures.png", sf::IntRect(32, 0, 16, 16));
-		break;
-	case 3:
-		texture.loadFromFile("Textures/textures.png", sf::IntRect(48, 0, 16, 16));
-		break;
-	case 4:
-		texture.loadFromFile("Textures/textures.png", sf::IntRect(64, 0, 16, 16));
-		break;
-	case 5:
-		texture.loadFromFile("Textures/textures.png", sf::IntRect(80, 0, 16, 16));
-		break;
-	default:
-		break;
-	}
+	texture.loadFromFile("Textures/textures.png", getTextureCoords(ID_));
 }
 
 unsigned int block::getID()

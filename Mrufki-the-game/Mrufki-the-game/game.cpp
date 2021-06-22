@@ -10,7 +10,6 @@ game::game()
 	fpsFont.loadFromFile("Textures/Roboto-Light.ttf");
 	fpsDisplay.setFont(fpsFont);
 	fpsDisplay.setString("FPS: 0");
-	fpsDisplay.setPosition({ 100,100 });
 	fpsDisplay.setCharacterSize(10);
 	fpsDisplay.setFillColor(sf::Color::White);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "getTextureCoords.h"
 
 class inventory : public sf::Drawable
 {

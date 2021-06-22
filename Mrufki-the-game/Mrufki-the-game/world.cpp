@@ -10,7 +10,6 @@ world::world()
 			chunks[j][i] = new chunk({ 128.0f * j, 128.0f * i });
 		}
 	}
-	
 
 	//World generator
 	srand(time(NULL));
@@ -49,7 +48,6 @@ world::world()
 		}
 	}
 
-	//exit(0);
 }
 
 world::~world()

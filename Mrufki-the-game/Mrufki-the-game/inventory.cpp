@@ -7,7 +7,15 @@ inventory::inventory()
 	toolbar[2] = 1;  //dirt
 	toolbar[3] = 2;  //grass
 	toolbar[4] = 3;  //stone
-	toolbar[5] = 4;  //wood
+	toolbar[5] = 6;  //cobblestone
+	toolbar[6] = 7;  //smooth stone
+	toolbar[7] = 8;  //wood
+	toolbar[8] = 4;  //wooden planks
+
+	for (int i = 0; i < 9; i++)
+	{
+		toolbar_textures[i].loadFromFile("Textures/textures.png", getTextureCoords(toolbar[i]));
+	}
 }
 
 void inventory::scrollLeft()
@@ -37,10 +45,12 @@ void inventory::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::RectangleShape rect;
 	rect.setSize({ 20, 20 });
-	rect.setFillColor(sf::Color::Transparent);
+	rect.setFillColor({255,255,255,50});
 	rect.setOutlineThickness(1);
 	sf::View view = target.getView();
 	sf::Vector2f tpos = view.getCenter();
+
+	sf::Sprite item;
 
 	for (int i = 0; i < 9; i++)
 	{
@@ -54,5 +64,9 @@ void inventory::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		}
 		rect.setPosition({ tpos.x + (i - 5) * 24 + 12, tpos.y + 158 });
 		target.draw(rect);
+
+		item.setTexture(toolbar_textures[i]);
+		item.setPosition({ tpos.x + (i - 5) * 24 + 14, tpos.y + 160 });
+		target.draw(item);
 	}
 }

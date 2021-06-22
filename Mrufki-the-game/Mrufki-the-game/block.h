@@ -2,6 +2,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "getTextureCoords.h"
 
 class block : public sf::Drawable
 {

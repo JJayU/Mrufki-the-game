@@ -21,8 +21,8 @@ void player::update(sf::Time& deltaTime, world* world)
 	bool isBlockAbove = (world->getBlockTypeOn({ position.x - 10, position.y - 50 }) >  0 || world->getBlockTypeOn({ position.x + 10, position.y - 50 }) >  0);
 	bool isBlockRight = (world->getBlockTypeOn({ position.x + 15, position.y - 4 })  >  0 || world->getBlockTypeOn({ position.x + 15, position.y - 20 }) >  0 || world->getBlockTypeOn({ position.x + 15, position.y - 36 }) >  0);
 	bool isBlockLeft  = (world->getBlockTypeOn({ position.x - 15, position.y - 4 })  >  0 || world->getBlockTypeOn({ position.x - 15, position.y - 20 }) >  0 || world->getBlockTypeOn({ position.x - 15, position.y - 36 }) >  0);
-	bool stairsRight  = (world->getBlockTypeOn({ position.x + 15, position.y - 4 })  >  0 && world->getBlockTypeOn({ position.x + 15, position.y - 20 }) == 0 && world->getBlockTypeOn({ position.x + 15, position.y - 36 }) == 0);
-	bool stairsLeft   = (world->getBlockTypeOn({ position.x - 15, position.y - 4 })  >  0 && world->getBlockTypeOn({ position.x - 15, position.y - 20 }) == 0 && world->getBlockTypeOn({ position.x - 15, position.y - 36 }) == 0);
+	bool stairsRight  = (world->getBlockTypeOn({ position.x + 15 + abs(currentSpeed.x / 10), position.y - 4 })  >  0 && world->getBlockTypeOn({ position.x + 15 + abs(currentSpeed.x / 10), position.y - 20 }) == 0 && world->getBlockTypeOn({ position.x + 15 + abs(currentSpeed.x / 10), position.y - 36 }) == 0);
+	bool stairsLeft   = (world->getBlockTypeOn({ position.x - 15 - abs(currentSpeed.x / 10), position.y - 4 })  >  0 && world->getBlockTypeOn({ position.x - 15 - abs(currentSpeed.x / 10), position.y - 20 }) == 0 && world->getBlockTypeOn({ position.x - 15 - abs(currentSpeed.x / 10), position.y - 36 }) == 0);
 
 
 	//horizontal moves
