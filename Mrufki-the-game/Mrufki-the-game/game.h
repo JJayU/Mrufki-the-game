@@ -1,8 +1,12 @@
 #pragma once
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "player.h"
 #include "world.h"
+#include "mob.h"
+
+#define MOB_CAP 10
 
 class game : public sf::Drawable
 {
@@ -19,7 +23,21 @@ private:
 	sf::Font fpsFont;
 	sf::Text fpsDisplay;
 	int loops = 0;
+	float current_time = 0;			// 0 - 6:00, 60 - 7:00...
 	
+	std::string clock();
+
+	sf::Music music;
+	sf::SoundBuffer sound_buffer1;
+	sf::SoundBuffer sound_buffer2;
+	sf::SoundBuffer sound_buffer3;
+	sf::Sound attack_sound;
+	sf::Sound block_placed_sound;
+	sf::Sound block_destroyed_sound;
+
+	bool game_state = true;				// false if the game is over
+
+	mob* mobs[MOB_CAP];
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

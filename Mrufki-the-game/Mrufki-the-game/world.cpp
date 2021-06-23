@@ -61,6 +61,11 @@ world::~world()
 	}
 }
 
+int world::getWorldSize()
+{
+	return WORLD_SIZE * 8 * 16;
+}
+
 void world::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	sf::View tview = target.getView();
