@@ -9,4 +9,4 @@ Simple sandbox Terraria-like game.
 It provides:
 - procedurally generated, unique worlds,
 - ability to change your world as much as you want,
-- fighting system with two different mobs,
+- fighting system,
