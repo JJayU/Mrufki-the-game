@@ -8,3 +8,9 @@ It provides:
 - procedurally generated, unique worlds,
 - ability to change your world as much as you want,
 - fighting system,
+
+Controls:
+- fight using LMB (when sword in hand)
+- mine using LMB (when pickaxe in hand)
+- place blocks using RMB
+- choose items using mouse scroll
