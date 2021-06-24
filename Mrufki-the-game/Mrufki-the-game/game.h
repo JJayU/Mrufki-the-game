@@ -23,7 +23,7 @@ private:
 	sf::Font fpsFont;
 	sf::Text fpsDisplay;
 	int loops = 0;
-	float current_time = 0;			// 0 - 6:00, 60 - 7:00...
+	float current_time = 360;			// 0 - 6:00, 60 - 7:00...
 	
 	std::string clock();
 

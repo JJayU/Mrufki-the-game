@@ -38,63 +38,65 @@ game::game()
 		std::cout << "Could not load sounds!\n";
 	}
 	attack_sound.setBuffer(sound_buffer1);
-	attack_sound.setVolume(50.0f);
+	attack_sound.setVolume(20.0f);
 	block_placed_sound.setBuffer(sound_buffer2);
 	block_destroyed_sound.setBuffer(sound_buffer3);
 }
 
 void game::update(sf::Time* deltaTime)
 {
-	player.update(*deltaTime, &world);
-	mainView.setCenter(player.getEyesPos());
-
-	sf::Vector2f fpsPosition = { player.getEyesPos().x - 320, player.getEyesPos().y - 180 };
-	fpsDisplay.setPosition(fpsPosition);
-	if (loops++ > 20)
-	{
-		loops = 0;
-		int fps = 1'000'000.0f / deltaTime->asMicroseconds();
-		fpsDisplay.setString(clock() + "\nFPS: " + std::to_string(fps));
-	}
-
-	for (size_t i = 0; i < MOB_CAP; i++)
-	{
-		if (mobs[i] != NULL)
-		{
-			if (!mobs[i]->alive())
-			{
-				mobs[i] = nullptr;
-				continue;
-			}
-			mobs[i]->update(*deltaTime, player.getEyesPos(), &world);
-
-			float distance = sqrt(pow(player.getEyesPos().x - mobs[i]->getPosition().x, 2) + pow(player.getEyesPos().y + 20 - mobs[i]->getPosition().y, 2));
-			if (distance < 20 && mobs[i]->readyToAttack())
-			{
-				player.hit(25);
-				mobs[i]->attack();
-			}
-		}
-		else
-		{
-			if (current_time > 960 && rand() % 10000 > 9990)
-			{
-				mobs[i] = new zombie;
-				float tpos = 60 + rand() % (world.getWorldSize() - 120);
-				mobs[i]->setPosition({ tpos, 70 });
-			}
-		}
-	}
-
-	current_time += 10 * deltaTime->asMicroseconds() / 1'000'000.0f;
-	if (current_time > 1440)
-	{
-		current_time = 0;
-	}
-
 	if (!player.isAlive())
 	{
 		game_state = false;
+	}
+	else
+	{
+		player.update(*deltaTime, &world);
+		mainView.setCenter(player.getEyesPos());
+
+		sf::Vector2f fpsPosition = { player.getEyesPos().x - 320, player.getEyesPos().y - 180 };
+		fpsDisplay.setPosition(fpsPosition);
+		if (loops++ > 20)
+		{
+			loops = 0;
+			int fps = 1'000'000.0f / deltaTime->asMicroseconds();
+			fpsDisplay.setString(clock() + "\nFPS: " + std::to_string(fps));
+		}
+
+		for (size_t i = 0; i < MOB_CAP; i++)
+		{
+			if (mobs[i] != NULL)
+			{
+				if (!mobs[i]->alive())
+				{
+					mobs[i] = nullptr;
+					continue;
+				}
+				mobs[i]->update(*deltaTime, player.getEyesPos(), &world);
+
+				float distance = sqrt(pow(player.getEyesPos().x - mobs[i]->getPosition().x, 2) + pow(player.getEyesPos().y + 20 - mobs[i]->getPosition().y, 2));
+				if (distance < 20 && mobs[i]->readyToAttack())
+				{
+					player.hit(25);
+					mobs[i]->attack();
+				}
+			}
+			else
+			{
+				if (current_time > 960 && rand() % 10000 > 9990)
+				{
+					mobs[i] = new zombie;
+					float tpos = 60 + rand() % (world.getWorldSize() - 120);
+					mobs[i]->setPosition({ tpos, 70 });
+				}
+			}
+		}
+
+		current_time += 10 * deltaTime->asMicroseconds() / 1'000'000.0f;
+		if (current_time > 1440)
+		{
+			current_time = 0;
+		}
 	}
 }
 
@@ -139,65 +141,68 @@ void game::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 void game::updateOnEvent(sf::Event* eventToReact, sf::Vector2f mouse_position)
 {
-	if (eventToReact->type == sf::Event::MouseButtonPressed)
+	if (game_state)
 	{
-		if (sqrt((mouse_position.x - player.getEyesPos().x) * (mouse_position.x - player.getEyesPos().x) + (mouse_position.y - player.getEyesPos().y) * (mouse_position.y - player.getEyesPos().y)) < 160)
+		if (eventToReact->type == sf::Event::MouseButtonPressed)
 		{
-			if (mouse_position.x < player.getEyesPos().x)
+			if (sqrt((mouse_position.x - player.getEyesPos().x) * (mouse_position.x - player.getEyesPos().x) + (mouse_position.y - player.getEyesPos().y) * (mouse_position.y - player.getEyesPos().y)) < 160)
 			{
-				player.setRotation(false);
-			}
-			else
-			{
-				player.setRotation(true);
-			}
-
-			if (eventToReact->mouseButton.button == sf::Mouse::Right)
-			{
-				// Placing blocks
-				if (world.getBlockTypeOn(mouse_position) == 0)
+				if (mouse_position.x < player.getEyesPos().x)
 				{
-					if (player.inventory.selectedItem() < 90 && player.inventory.selectedItem() != 0)
+					player.setRotation(false);
+				}
+				else
+				{
+					player.setRotation(true);
+				}
+
+				if (eventToReact->mouseButton.button == sf::Mouse::Right)
+				{
+					// Placing blocks
+					if (world.getBlockTypeOn(mouse_position) == 0)
 					{
-						world.setBlock(mouse_position, player.inventory.selectedItem());
-						block_placed_sound.play();
+						if (player.inventory.selectedItem() < 90 && player.inventory.selectedItem() != 0)
+						{
+							world.setBlock(mouse_position, player.inventory.selectedItem());
+							block_placed_sound.play();
+						}
 					}
 				}
-			}
-			if (eventToReact->mouseButton.button == sf::Mouse::Left)
-			{
-				// Mine
-				if (player.inventory.selectedItem() == 98 && world.getBlockTypeOn(mouse_position) != 5 && world.getBlockTypeOn(mouse_position) != 0)
+				if (eventToReact->mouseButton.button == sf::Mouse::Left)
 				{
-					block_destroyed_sound.play();
-					world.setBlock(mouse_position, 0);
-				}
-
-				// Fight
-				if (player.inventory.selectedItem() == 99 && player.readyToAttack())
-				{
-					attack_sound.play();
-					player.attack();
-					for (size_t i = 0; i < MOB_CAP; i++)
+					// Mine
+					if (player.inventory.selectedItem() == 98 && world.getBlockTypeOn(mouse_position) != 5 && world.getBlockTypeOn(mouse_position) != 0)
 					{
-						if (mobs[i] != NULL)
+						block_destroyed_sound.play();
+						world.setBlock(mouse_position, 0);
+					}
+
+					// Fight
+					if (player.inventory.selectedItem() == 99 && player.readyToAttack())
+					{
+						attack_sound.play();
+						player.attack();
+						for (size_t i = 0; i < MOB_CAP; i++)
 						{
-							if (player.getEyesPos().x > mobs[i]->getPosition().x && player.getRotation() == false)
+							if (mobs[i] != NULL)
 							{
-								float distance = sqrt(pow(player.getEyesPos().x - mobs[i]->getPosition().x, 2) + pow(player.getEyesPos().y - mobs[i]->getPosition().y, 2));
-								if (distance < 100)
+								if (player.getEyesPos().x > mobs[i]->getPosition().x && player.getRotation() == false)
 								{
-									mobs[i]->hit(30);
-									mobs[i]->knockback(500, false);
+									float distance = sqrt(pow(player.getEyesPos().x - mobs[i]->getPosition().x, 2) + pow(player.getEyesPos().y - mobs[i]->getPosition().y, 2));
+									if (distance < 100)
+									{
+										mobs[i]->hit(30);
+										mobs[i]->knockback(500, false);
+									}
 								}
-							}
-							else if (player.getEyesPos().x < mobs[i]->getPosition().x && player.getRotation() == true)
-							{
-								float distance = sqrt(pow(player.getEyesPos().x - mobs[i]->getPosition().x, 2) + pow(player.getEyesPos().y - mobs[i]->getPosition().y, 2));
-								if (distance < 100)
+								else if (player.getEyesPos().x < mobs[i]->getPosition().x && player.getRotation() == true)
 								{
-									mobs[i]->hit(30);
-									mobs[i]->knockback(500, true);
+									float distance = sqrt(pow(player.getEyesPos().x - mobs[i]->getPosition().x, 2) + pow(player.getEyesPos().y - mobs[i]->getPosition().y, 2));
+									if (distance < 100)
+									{
+										mobs[i]->hit(30);
+										mobs[i]->knockback(500, true);
+									}
 								}
 							}
 						}
@@ -205,18 +210,18 @@ void game::updateOnEvent(sf::Event* eventToReact, sf::Vector2f mouse_position)
 				}
 			}
 		}
-	}
 
-	// Inventory scrolling
-	if (eventToReact->type == sf::Event::MouseWheelScrolled)
-	{
-		if (eventToReact->mouseWheelScroll.delta > 0)
+		// Inventory scrolling
+		if (eventToReact->type == sf::Event::MouseWheelScrolled)
 		{
-			player.inventory.scrollLeft();
-		}
-		else
-		{
-			player.inventory.scrollRight();
+			if (eventToReact->mouseWheelScroll.delta > 0)
+			{
+				player.inventory.scrollLeft();
+			}
+			else
+			{
+				player.inventory.scrollRight();
+			}
 		}
 	}
 }
